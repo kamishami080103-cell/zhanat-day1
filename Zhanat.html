@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Приглашение на День рождения — Жанат</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,600&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: #0b1017;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Montserrat', sans-serif;
+    overflow: hidden;
+  }
+
+  .card-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 430px;
+    height: 100vh;
+    max-height: 932px;
+    background: radial-gradient(circle at 50% 30%, #172233 0%, #0e1520 60%, #090d14 100%);
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+  }
+
+  /* Аристократичная тройная рамка */
+  .aristocratic-frame {
+    position: absolute;
+    inset: 12px;
+    border: 1.5px solid rgba(220, 235, 255, 0.75);
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .aristocratic-frame::before {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border: 0.5px solid rgba(180, 210, 240, 0.45);
+  }
+
+  .aristocratic-frame::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border: 1px solid rgba(200, 220, 250, 0.25);
+  }
+
+  /* Уголки с вензелями */
+  .corner {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    border-color: rgba(240, 245, 255, 0.95);
+    border-style: solid;
+    pointer-events: none;
+    z-index: 6;
+  }
+  .corner-tl { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
+  .corner-tr { top: 8px; right: 8px; border-width: 2px 2px 0 0; }
+  .corner-bl { bottom: 8px; left: 8px; border-width: 0 0 2px 2px; }
+  .corner-br { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
+
+  /* Ромбы на рамке */
+  .ornament-gem {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: rgba(220, 240, 255, 0.9);
+    transform: rotate(45deg);
+    z-index: 6;
+  }
+  .gem-top { top: 13px; left: 50%; transform: translateX(-50%) rotate(45deg); }
+  .gem-bottom { bottom: 13px; left: 50%; transform: translateX(-50%) rotate(45deg); }
+  .gem-left { left: 13px; top: 50%; transform: translateY(-50%) rotate(45deg); }
+  .gem-right { right: 13px; top: 50%; transform: translateY(-50%) rotate(45deg); }
+
+  .screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 3;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(1.04);
+  }
+
+  /* КОНВЕРТ */
+  .envelope-box {
+    position: relative;
+    width: 320px;
+    height: 220px;
+    background: linear-gradient(145deg, #1b283d 0%, #111a28 100%);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(180, 205, 235, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+  }
+
+  .envelope-box:active {
+    transform: scale(0.97);
+  }
+
+  .envelope-lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* ИЗОГНУТАЯ НАДПИСЬ НАД ПЕЧАТЬЮ (УМЕНЬШЕНА НА 1px) */
+  .curved-hint {
+    position: absolute;
+    top: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 240px;
+    height: 110px;
+    pointer-events: none;
+    z-index: 10;
+    overflow: visible;
+  }
+
+  .curved-hint text {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    fill: #ffffff;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.95));
+  }
+
+  /* СУРГУЧНАЯ ПЕЧАТЬ */
+  .wax-seal {
+    position: relative;
+    top: 14px;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ffffff 0%, #dcdcdc 45%, #b5b5b5 85%, #9e9e9e 100%);
+    box-shadow: 
+      0 5px 14px rgba(0,0,0,0.45),
+      inset 0 2px 4px rgba(255,255,255,0.9),
+      inset 0 -3px 7px rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 6;
+    animation: pulseSeal 2.2s infinite ease-in-out;
+  }
+
+  .wax-seal-inner {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(130, 130, 130, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Great Vibes', cursive;
+    font-size: 30px;
+    color: #3a3a3a;
+  }
+
+  @keyframes pulseSeal {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+  }
+
+  /* ЭКРАН 2 */
+  .header-group {
+    position: relative;
+    text-align: center;
+    margin-bottom: 2px;
+  }
+
+  .bg-word {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(180, 210, 245, 0.22);
+    font-weight: 600;
+  }
+
+  .script-subtitle {
+    font-family: 'Great Vibes', cursive;
+    font-size: 35px;
+    color: #b8d2ef;
+    margin-top: -18px;
+    margin-bottom: 2px;
+  }
+
+  .main-name {
+    font-family: 'Great Vibes', cursive;
+    font-size: 60px;
+    line-height: 1;
+    color: #ffffff;
+    margin: 0 0 6px;
+    text-shadow: 0 2px 15px rgba(100, 150, 220, 0.5);
+  }
+
+  /* ФОТО */
+  .photo-container {
+    width: 165px;
+    height: 165px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 8px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    border: 3px solid rgba(210, 230, 255, 0.8);
+  }
+
+  .photo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .invite-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    color: #d6e5ff;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .date-block {
+    width: 100%;
+    max-width: 310px;
+    border-top: 1px solid rgba(170, 200, 240, 0.35);
+    border-bottom: 1px solid rgba(170, 200, 240, 0.35);
+    padding: 6px 0;
+    text-align: center;
+    margin-bottom: 6px;
+  }
+
+  .date-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 23px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+  }
+
+  .time-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    color: #d6e5ff;
+    margin-bottom: 3px;
+  }
+
+  .place-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    color: #a6c6ef;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+
+  .actions-hint {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #b8d2ef;
+    margin-bottom: 8px;
+  }
+
+  .buttons-row {
+    display: flex;
+    justify-content: center;
+    gap: 36px;
+    margin-bottom: 10px;
+  }
+
+  .action-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #ffffff;
+    transition: transform 0.2s ease;
+  }
+
+  .action-item:active {
+    transform: scale(0.93);
+  }
+
+  .action-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    color: #d0e4ff;
+    margin-bottom: 4px;
+  }
+
+  .circle-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #243b5e 0%, #121d2e 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(150, 190, 240, 0.35);
+  }
+
+  .circle-btn svg {
+    width: 24px;
+    height: 24px;
+    stroke: #ffffff;
+    fill: none;
+    stroke-width: 1.8;
+  }
+
+  .surprise-note {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9.5px;
+    font-weight: 400;
+    color: #adc8ef;
+    text-align: center;
+    max-width: 280px;
+    line-height: 1.3;
+    padding: 4px 8px;
+    border-radius: 8px;
+    background: rgba(20, 35, 58, 0.7);
+    border: 1px solid rgba(120, 170, 230, 0.2);
+  }
+</style>
+</head>
+<body>
+
+<div class="card-wrapper">
+  <!-- Аристократичная рамка -->
+  <div class="aristocratic-frame"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+  <div class="ornament-gem gem-top"></div>
+  <div class="ornament-gem gem-bottom"></div>
+  <div class="ornament-gem gem-left"></div>
+  <div class="ornament-gem gem-right"></div>
+
+  <!-- ЭКРАН 1: КОНВЕРТ -->
+  <div class="screen" id="screenEnvelope">
+    <div class="envelope-box" onclick="openInvitation()">
+      <svg class="envelope-lines" viewBox="0 0 320 220" preserveAspectRatio="none">
+        <polyline points="0,0 160,115 320,0" fill="none" stroke="#253856" stroke-width="1.5"/>
+        <polyline points="0,220 120,95" fill="none" stroke="#1d2d45" stroke-width="1.2"/>
+        <polyline points="320,220 200,95" fill="none" stroke="#1d2d45" stroke-width="1.2"/>
+      </svg>
+
+      <!-- Изящная дугообразная надпись строго над печатью -->
+      <svg class="curved-hint" viewBox="0 0 240 110">
+        <path id="curvePath" d="M 35,62 Q 120,18 205,62" fill="transparent"/>
+        <text width="240" text-anchor="middle">
+          <textPath href="#curvePath" startOffset="50%">
+            нажмите, чтобы открыть
+          </textPath>
+        </text>
+      </svg>
+
+      <div class="wax-seal">
+        <div class="wax-seal-inner">Ж</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ЭКРАН 2: ПРИГЛАШЕНИЕ -->
+  <div class="screen hidden" id="screenDetails">
+    <div class="header-group">
+      <div class="bg-word">Birthday</div>
+      <div class="script-subtitle">День рождения</div>
+    </div>
+
+    <div class="main-name">Жанат</div>
+
+    <div class="photo-container">
+      <img src="zhanat.jpg" alt="Жанат">
+    </div>
+
+    <div class="invite-text">приглашаем вас отметить этот особенный день</div>
+
+    <div class="date-block">
+      <div class="date-text">Суббота, 28 Ноября</div>
+    </div>
+
+    <div class="time-text">в 15:00</div>
+    <div class="place-text">Ресторан Rubai • проспект Туран, 29</div>
+
+    <div class="actions-hint">Нажмите для подробностей</div>
+
+    <div class="buttons-row">
+      <a class="action-item" href="https://2gis.kz/astana/search/проспект%20Туран,%2029%20Rubai" target="_blank">
+        <span class="action-label">локация</span>
+        <div class="circle-btn">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 21s-6-5.33-6-10a6 6 0 1 1 12 0c0 4.67-6 10-6 10z"/>
+            <circle cx="12" cy="11" r="2.2"/>
+          </svg>
+        </div>
+      </a>
+
+      <a class="action-item" href="https://wa.me/77770403006?text=Здравствуйте!%20С%20удовольствием%20подтверждаю%20своё%20присутствие%20на%20дне%20рождения%20Жаната%2028%20ноября!" target="_blank">
+        <span class="action-label">подтвердить</span>
+        <div class="circle-btn">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9"/>
+            <polyline points="8.5 12.5 11 15 16 9.5"/>
+          </svg>
+        </div>
+      </a>
+    </div>
+
+    <div class="surprise-note">
+      * Мероприятие является сюрпризом для виновника торжества — пожалуйста, сохраните это в тайне
+    </div>
+  </div>
+</div>
+
+<script>
+  function openInvitation() {
+    document.getElementById('screenEnvelope').classList.add('hidden');
+    document.getElementById('screenDetails').classList.remove('hidden');
+  }
+</script>
+
+</body>
+</html>
